@@ -1,8 +1,8 @@
 import Link from "next/link"
-import { useCurrentUser } from "~/users/hooks/useCurrentUser"
-import logout from "~/auth/mutations/logout"
 import { useMutation } from "@blitzjs/rpc"
 import { Routes } from "@blitzjs/next"
+import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
+import logout from "~/features/auth/mutations/logout"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
