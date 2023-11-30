@@ -1,8 +1,8 @@
 import { LabeledTextField } from "~/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "~/core/components/Form"
-import signup from "~/auth/mutations/signup"
-import { Signup } from "~/auth/schemas"
 import { useMutation } from "@blitzjs/rpc"
+import signup from "~/features/auth/mutations/signup"
+import { Signup } from "~/features/auth/schemas"
 
 type SignupFormProps = {
   onSuccess?: () => void
