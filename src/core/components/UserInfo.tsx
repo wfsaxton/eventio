@@ -33,12 +33,12 @@ export const UserInfo = () => {
   } else {
     return (
       <>
-        <Link href={Routes.SignupPage()}>
-          <strong>Sign Up</strong>
-        </Link>
-        <Link href={Routes.LoginPage()}>
-          <strong>Login</strong>
-        </Link>
+        <Button component={Link} href={Routes.SignupPage()}>
+          Sign Up
+        </Button>
+        <Button component={Link} href={Routes.LoginPage()}>
+          Login
+        </Button>
       </>
     )
   }
