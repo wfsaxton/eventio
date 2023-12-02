@@ -1,6 +1,6 @@
 import Layout from "~/core/layouts/Layout"
 import { BlitzPage } from "@blitzjs/next"
-import { UserInfo } from "~/core/components/UserInfo"
+import UserInfo from "~/core/components/UserInfo"
 import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
 import { Vertical } from "mantine-layout-components"
 import { AuthenticationForm } from "~/core/components/AuthenticationForm"

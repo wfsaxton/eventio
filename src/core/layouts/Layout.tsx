@@ -1,9 +1,12 @@
 import Head from "next/head"
 import React, { Suspense } from "react"
 import { BlitzLayout, Routes } from "@blitzjs/next"
-import { Anchor, AppShell, Footer, Header, Navbar, Text } from "@mantine/core"
+import { Anchor, AppShell, Button, Footer, Header, Loader, Navbar, Text } from "@mantine/core"
 import { Horizontal, Vertical } from "mantine-layout-components"
 import Link from "next/link"
+import { useMutation } from "@blitzjs/rpc"
+import logout from "~/features/auth/mutations/logout"
+import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
 
 type Props = {
   title?: string
@@ -11,7 +14,9 @@ type Props = {
 }
 
 const Layout: BlitzLayout<Props> = ({ title, children }) => {
+  const [logoutMutation] = useMutation(logout)
   const currentYear = new Date().getFullYear()
+  const currentUser = useCurrentUser()
 
   return (
     <>
@@ -28,8 +33,8 @@ const Layout: BlitzLayout<Props> = ({ title, children }) => {
         //   </Navbar>
         // }
         header={
-          <Header height={45} p="xs">
-            <Horizontal fullH>
+          <Header height={55} p="xs">
+            <Horizontal fullH spaceBetween>
               {/* <Anchor component={Link} href="/">
                 Eventio
               </Anchor> */}
@@ -43,6 +48,17 @@ const Layout: BlitzLayout<Props> = ({ title, children }) => {
               >
                 Eventio
               </Anchor>
+              {currentUser && (
+                <Button
+                  size="xs"
+                  variant="light"
+                  onClick={async () => {
+                    await logoutMutation()
+                  }}
+                >
+                  Logout
+                </Button>
+              )}
             </Horizontal>
           </Header>
         }
@@ -63,7 +79,7 @@ const Layout: BlitzLayout<Props> = ({ title, children }) => {
         })}
       >
         <Vertical fullW fullH>
-          <Suspense fallback="Loading...">{children}</Suspense>
+          <Suspense fallback={<Loader />}>{children}</Suspense>
         </Vertical>
       </AppShell>
     </>
