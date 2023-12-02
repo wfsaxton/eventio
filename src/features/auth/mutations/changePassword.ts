@@ -3,10 +3,16 @@ import { resolver } from "@blitzjs/rpc"
 import { SecurePassword } from "@blitzjs/auth/secure-password"
 import db from "db"
 import { authenticateUser } from "./login"
-import { ChangePassword } from "../schemas"
+import { z } from "zod"
+import { password } from "~/features/auth/schemas"
+
+export const Input = z.object({
+  currentPassword: z.string(),
+  newPassword: password,
+})
 
 export default resolver.pipe(
-  resolver.zod(ChangePassword),
+  resolver.zod(Input),
   resolver.authorize(),
   async ({ currentPassword, newPassword }, ctx) => {
     const user = await db.user.findFirst({ where: { id: ctx.session.userId } })

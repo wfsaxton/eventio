@@ -1,6 +1,5 @@
 import Layout from "~/core/layouts/Layout"
 import { FORM_ERROR } from "~/core/components/Form"
-import { ResetPassword } from "~/features/auth/schemas"
 import resetPassword from "~/features/auth/mutations/resetPassword"
 import { BlitzPage, Routes } from "@blitzjs/next"
 import { useRouter } from "next/router"
