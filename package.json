@@ -6,7 +6,8 @@
     "build": "blitz build",
     "start": "blitz start",
     "studio.orig": "blitz prisma studio",
-    "studio": "BROWSER=none bun blitz prisma studio",
+    "db:studio": "BROWSER=none blitz prisma studio",
+    "db:migrate": "blitz prisma migrate dev",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx ."
   },
   "prisma": {
