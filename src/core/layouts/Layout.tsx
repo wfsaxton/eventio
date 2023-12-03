@@ -38,27 +38,34 @@ const Layout: BlitzLayout<Props> = ({ title, children }) => {
               {/* <Anchor component={Link} href="/">
                 Eventio
               </Anchor> */}
-              <Anchor
-                component={Link}
-                href={Routes.Home()}
-                fw="bold"
-                underline={false}
-                color="grey.3"
-                size="xl"
-              >
-                Eventio
-              </Anchor>
-              <Link href={Routes.Todos()}>My Todo</Link>
-              {currentUser && (
-                <Button
-                  size="xs"
-                  variant="light"
-                  onClick={async () => {
-                    await logoutMutation()
-                  }}
+              <Horizontal>
+                <Anchor
+                  component={Link}
+                  href={Routes.Home()}
+                  fw="bold"
+                  underline={false}
+                  color="grey.3"
+                  size="xl"
                 >
-                  Logout
-                </Button>
+                  Eventio
+                </Anchor>
+
+                <Link href={Routes.Todos()}>My Todos</Link>
+              </Horizontal>
+
+              {currentUser && (
+                <Horizontal>
+                  <Text>{currentUser?.name || "Guest"}</Text>
+                  <Button
+                    size="xs"
+                    variant="light"
+                    onClick={async () => {
+                      await logoutMutation()
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </Horizontal>
               )}
             </Horizontal>
           </Header>

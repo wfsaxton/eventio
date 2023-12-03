@@ -66,8 +66,6 @@ const Todos: BlitzPage = () => {
             ))}
           </List>
         </Suspense>
-        <br />
-        {currentUser && <UserInfo />}
       </Vertical>
     </Layout>
   )
