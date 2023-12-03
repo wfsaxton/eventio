@@ -15,6 +15,11 @@ export default resolver.pipe(resolver.zod(Input), resolver.authorize(), async ({
         equals: userId,
       },
     },
+    select: {
+      id: true,
+      title: true,
+      done: true,
+    },
   })
 
   return todos
