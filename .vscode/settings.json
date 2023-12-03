@@ -4,5 +4,17 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "jest.autoRun": "off"
+  "jest.autoRun": "off",
+  "files.exclude": {
+    ".eslintrc.js": true,
+    ".husky": true,
+    ".next": true,
+    ".prettierignore": true,
+    ".vscode": true,
+    "bun.lockb": true,
+    "next-env.d.ts": true,
+    "next.config.js": true,
+    "node_modules": true,
+    "package-lock.json": true
+  }
 }
