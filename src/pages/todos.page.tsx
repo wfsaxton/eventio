@@ -5,11 +5,9 @@ import { notifications } from "@mantine/notifications"
 import { IconPlus } from "@tabler/icons-react"
 import { Horizontal, Vertical } from "mantine-layout-components"
 import { Suspense, useState } from "react"
-import UserInfo from "~/core/components/UserInfo"
 import Layout from "~/core/layouts/Layout"
 import addTodo from "~/features/todos/mutations/addTodo"
 import getMyTodos from "~/features/todos/queries/getMyTodos"
-import getTodos from "~/features/todos/queries/getTodos"
 import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
 
 const Todos: BlitzPage = () => {
