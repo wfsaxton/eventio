@@ -1,4 +1,5 @@
 import { resolver } from "@blitzjs/rpc"
+import db from "db"
 import { z } from "zod"
 
 const Input = z.object({
@@ -6,11 +7,7 @@ const Input = z.object({
 })
 
 export default resolver.pipe(resolver.zod(Input), resolver.authorize(), async ({ search }) => {
-  const todos = [
-    { id: 1, title: "buy Walmart" },
-    { id: 2, title: "buy Target" },
-    { id: 3, title: "buy Costco" },
-  ]
+  const todos = await db.todo.findMany({})
 
   return todos
 })
