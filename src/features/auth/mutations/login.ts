@@ -28,7 +28,9 @@ export const authenticateUser = async (rawEmail: string, rawPassword: string) =>
   return rest
 }
 
-export default resolver.pipe(resolver.zod(Input), async ({ email, password }, ctx) => {
+export default resolver.pipe(resolver.zod(Input), async (params, ctx) => {
+  const { email, password } = params
+
   // This throws an error if credentials are invalid
   const user = await authenticateUser(email, password)
 
