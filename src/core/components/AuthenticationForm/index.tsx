@@ -99,8 +99,7 @@ export function AuthenticationForm(props: PaperProps) {
               required
               label="Name"
               placeholder="Your name"
-              value={form.values.fullname}
-              onChange={(event) => form.setFieldValue("fullname", event.currentTarget.value)}
+              {...form.getInputProps("fullname")}
               radius="md"
             />
           )}
