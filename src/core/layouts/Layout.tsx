@@ -48,6 +48,7 @@ const Layout: BlitzLayout<Props> = ({ title, children }) => {
               >
                 Eventio
               </Anchor>
+              <Link href={Routes.Todos()}>My Todo</Link>
               {currentUser && (
                 <Button
                   size="xs"

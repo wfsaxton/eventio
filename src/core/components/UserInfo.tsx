@@ -12,10 +12,11 @@ const UserInfo = () => {
     <>
       <Vertical>
         <Text>
-          User id: <code>{currentUser.id}</code>
+          User: {currentUser.name}
+          <code>({currentUser.id})</code>
         </Text>
         <Text>
-          User role: <code>{currentUser.role}</code>
+          Role: <code>{currentUser.role}</code>
         </Text>
       </Vertical>
     </>

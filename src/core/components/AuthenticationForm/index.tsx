@@ -28,7 +28,7 @@ export function AuthenticationForm(props: PaperProps) {
   const form = useForm({
     initialValues: {
       email: "",
-      name: "",
+      fullname: "",
       password: "",
       terms: true,
     },
@@ -61,6 +61,7 @@ export function AuthenticationForm(props: PaperProps) {
   }
 
   const onRegister = async (values: {
+    fullname: string
     email: string
     password: string
   }): Promise<
@@ -97,8 +98,8 @@ export function AuthenticationForm(props: PaperProps) {
             <TextInput
               label="Name"
               placeholder="Your name"
-              value={form.values.name}
-              onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
+              value={form.values.fullname}
+              onChange={(event) => form.setFieldValue("fullname", event.currentTarget.value)}
               radius="md"
             />
           )}
