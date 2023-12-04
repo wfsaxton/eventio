@@ -9,6 +9,7 @@ import Layout from "~/core/layouts/Layout"
 import addTodo from "~/features/todos/mutations/addTodo"
 import getMyTodos from "~/features/todos/queries/getMyTodos"
 import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
+import { invalidateQueries } from "~/utils/utils"
 
 const Todos: BlitzPage = () => {
   const currentUser = useCurrentUser()
@@ -16,12 +17,13 @@ const Todos: BlitzPage = () => {
   const [title, setTitle] = useState("")
 
   const [$addTodo] = useMutation(addTodo, {
-    onSuccess: (todo) => {
+    onSuccess: async (todo) => {
       setTitle("")
       notifications.show({
         title: "Todo added successfully",
         message: todo.title,
       })
+      await invalidateQueries()
     },
   })
 
