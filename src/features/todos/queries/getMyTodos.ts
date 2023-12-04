@@ -15,6 +15,9 @@ export default resolver.pipe(resolver.zod(Input), resolver.authorize(), async ({
         equals: userId,
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
     select: {
       id: true,
       title: true,
