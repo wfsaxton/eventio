@@ -39,9 +39,9 @@ export function AuthenticationForm(props: PaperProps) {
     },
   })
 
-  const onSubmit = (values: typeof form.values) => {
-    if (type === "login") onLogin(values)
-    else if (type === "register") onRegister(values)
+  const onSubmit = async (values: typeof form.values) => {
+    if (type === "login") await onLogin(values)
+    else if (type === "register") await onRegister(values)
     console.log("values", values)
   }
 

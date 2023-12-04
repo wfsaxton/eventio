@@ -1,7 +1,6 @@
 import { FORM_ERROR } from "~/core/components/Form"
 import { useMutation } from "@blitzjs/rpc"
 import signup from "~/features/auth/mutations/signup"
-import { Signup } from "~/features/auth/mutations/signup"
 import { Button, PasswordInput, TextInput, Title } from "@mantine/core"
 import { Routes } from "@blitzjs/next"
 import { Vertical } from "mantine-layout-components"
@@ -27,6 +26,7 @@ export const SignupForm = (props: SignupFormProps) => {
   })
 
   const onSubmit = async (values: {
+    fullname: string
     email: string
     password: string
   }): Promise<
