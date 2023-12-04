@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "blitz dev",
-    "build": "blitz build",
+    "build": "blitz prisma migrate deploy && blitz prisma generate && blitz build",
     "start": "blitz start",
     "studio.orig": "blitz prisma studio",
     "db:studio": "BROWSER=none blitz prisma studio",
