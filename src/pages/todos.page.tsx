@@ -2,11 +2,12 @@ import { BlitzPage } from "@blitzjs/next"
 import { useMutation, useQuery } from "@blitzjs/rpc"
 import { Loader, List, Text, Button, Title, ActionIcon, Input, Checkbox } from "@mantine/core"
 import { notifications } from "@mantine/notifications"
-import { IconPlus } from "@tabler/icons-react"
+import { IconPlus, IconX } from "@tabler/icons-react"
 import { Horizontal, Vertical } from "mantine-layout-components"
 import { Suspense, useState } from "react"
 import Layout from "~/core/layouts/Layout"
 import addTodo from "~/features/todos/mutations/addTodo"
+import deleteTodos from "~/features/todos/mutations/deleteTodos"
 import toggleTodo from "~/features/todos/mutations/toggleTodo"
 import getMyTodos from "~/features/todos/queries/getMyTodos"
 import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
@@ -28,12 +29,6 @@ const Todos: BlitzPage = () => {
     },
   })
 
-  const handleAddTodo = async () => {
-    await $addTodo({
-      title: title,
-    })
-  }
-
   const [$toggleTodo] = useMutation(toggleTodo, {
     onSuccess: async (todo) => {
       notifications.show({
@@ -43,6 +38,22 @@ const Todos: BlitzPage = () => {
       await invalidateQueries()
     },
   })
+
+  const [$deleteTodos] = useMutation(deleteTodos, {
+    onSuccess: async (result) => {
+      notifications.show({
+        title: "Todos deleted successfully",
+        message: "All todos were deleted",
+      })
+      await invalidateQueries()
+    },
+  })
+
+  const handleAddTodo = async () => {
+    await $addTodo({
+      title: title,
+    })
+  }
 
   const handleKeyDown = async (event) => {
     if (event.key === "Enter") {
@@ -77,6 +88,9 @@ const Todos: BlitzPage = () => {
           />
           <ActionIcon size="xs" onClick={handleAddTodo}>
             <IconPlus />
+          </ActionIcon>
+          <ActionIcon size="xs" onClick={async () => await $deleteTodos({})}>
+            <IconX />
           </ActionIcon>
         </Horizontal>
 
