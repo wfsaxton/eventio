@@ -1,12 +1,13 @@
 import { BlitzPage } from "@blitzjs/next"
 import { useMutation, useQuery } from "@blitzjs/rpc"
-import { Loader, List, Text, Button, Title, ActionIcon, Input } from "@mantine/core"
+import { Loader, List, Text, Button, Title, ActionIcon, Input, Checkbox } from "@mantine/core"
 import { notifications } from "@mantine/notifications"
 import { IconPlus } from "@tabler/icons-react"
 import { Horizontal, Vertical } from "mantine-layout-components"
 import { Suspense, useState } from "react"
 import Layout from "~/core/layouts/Layout"
 import addTodo from "~/features/todos/mutations/addTodo"
+import toggleTodo from "~/features/todos/mutations/toggleTodo"
 import getMyTodos from "~/features/todos/queries/getMyTodos"
 import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
 import { invalidateQueries } from "~/utils/utils"
@@ -33,12 +34,34 @@ const Todos: BlitzPage = () => {
     })
   }
 
+  const [$toggleTodo] = useMutation(toggleTodo, {
+    onSuccess: async (todo) => {
+      notifications.show({
+        title: "Todo updated successfully",
+        message: (todo.done ? "Completed" : "Uncompleted") + " " + todo.title,
+      })
+      await invalidateQueries()
+    },
+  })
+
   const handleKeyDown = async (event) => {
     if (event.key === "Enter") {
       await $addTodo({
         title: title,
       })
     }
+  }
+
+  const Todo = ({ todo }) => {
+    return (
+      <Horizontal>
+        <Checkbox
+          checked={todo.done}
+          onClick={async () => await $toggleTodo({ id: todo.id, done: !todo.done })}
+        />
+        <Text>{todo.title}</Text>
+      </Horizontal>
+    )
   }
 
   return (
@@ -60,9 +83,7 @@ const Todos: BlitzPage = () => {
         <Suspense fallback={<Loader />}>
           <List>
             {todos.map((todo, index) => (
-              <List.Item key={todo.id}>
-                <Text>{todo.title}</Text>
-              </List.Item>
+              <Todo key={todo.id} todo={todo} />
             ))}
           </List>
         </Suspense>
