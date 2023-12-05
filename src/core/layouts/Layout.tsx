@@ -1,12 +1,23 @@
 import Head from "next/head"
 import React, { Suspense } from "react"
 import { BlitzLayout, Routes } from "@blitzjs/next"
-import { Anchor, AppShell, Button, Footer, Header, Loader, Navbar, Text } from "@mantine/core"
+import {
+  Anchor,
+  AppShell,
+  Button,
+  Footer,
+  Header,
+  Loader,
+  Navbar,
+  Text,
+  Tooltip,
+} from "@mantine/core"
 import { Horizontal, Vertical } from "mantine-layout-components"
 import Link from "next/link"
 import { useMutation } from "@blitzjs/rpc"
 import logout from "~/features/auth/mutations/logout"
 import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
+import { IconUser, IconUserShield } from "@tabler/icons-react"
 
 type Props = {
   title?: string
@@ -16,7 +27,7 @@ type Props = {
 const Layout: BlitzLayout<Props> = ({ title, children }) => {
   const [logoutMutation] = useMutation(logout)
   const currentYear = new Date().getFullYear()
-  const currentUser = useCurrentUser()
+  const user = useCurrentUser()
 
   return (
     <>
@@ -53,9 +64,18 @@ const Layout: BlitzLayout<Props> = ({ title, children }) => {
                 <Link href={Routes.Todos()}>My Todos</Link>
               </Horizontal>
 
-              {currentUser && (
-                <Horizontal>
-                  <Text>{currentUser?.name || "Guest"}</Text>
+              {user && (
+                <Horizontal center>
+                  {user && (
+                    <Text>
+                      {user.name}{" "}
+                      {user.isAdmin && (
+                        <Tooltip label="Admin">
+                          <IconUserShield size={15} />
+                        </Tooltip>
+                      )}
+                    </Text>
+                  )}
                   <Button
                     size="xs"
                     variant="light"
