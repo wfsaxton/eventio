@@ -18,22 +18,12 @@ const Todos: BlitzPage = () => {
   const [todos] = useQuery(getMyTodos, {})
   const [title, setTitle] = useState("")
 
-  const [$addTodo] = useMutation(addTodo, {
+  const [$addTodo, { isLoading }] = useMutation(addTodo, {
     onSuccess: async (todo) => {
       setTitle("")
       notifications.show({
         title: "Todo added successfully",
         message: todo.title,
-      })
-      await invalidateQueries()
-    },
-  })
-
-  const [$toggleTodo] = useMutation(toggleTodo, {
-    onSuccess: async (todo) => {
-      notifications.show({
-        title: "Todo updated successfully",
-        message: (todo.done ? "Completed" : "Uncompleted") + " " + todo.title,
       })
       await invalidateQueries()
     },
@@ -64,11 +54,22 @@ const Todos: BlitzPage = () => {
   }
 
   const Todo = ({ todo }) => {
+    const [$toggleTodo, { isLoading }] = useMutation(toggleTodo, {
+      onSuccess: async (todo) => {
+        // notifications.show({
+        //   title: "Todo updated successfully",
+        //   message: (todo.done ? "Completed" : "Uncompleted") + " " + todo.title,
+        // })
+        await invalidateQueries()
+      },
+    })
+
     return (
       <Horizontal>
         <Checkbox
+          disabled={isLoading}
           checked={todo.done}
-          onClick={async () => await $toggleTodo({ id: todo.id, done: !todo.done })}
+          onChange={async () => await $toggleTodo({ id: todo.id, done: !todo.done })}
         />
         <Text>{todo.title}</Text>
       </Horizontal>
@@ -86,7 +87,7 @@ const Todos: BlitzPage = () => {
             onChange={(event) => setTitle(event.currentTarget.value)}
             onKeyDown={handleKeyDown}
           />
-          <ActionIcon size="xs" onClick={handleAddTodo}>
+          <ActionIcon size="xs" onClick={handleAddTodo} loading={isLoading}>
             <IconPlus />
           </ActionIcon>
           <ActionIcon size="xs" onClick={async () => await $deleteTodos({})}>
