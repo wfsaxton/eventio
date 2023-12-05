@@ -3,8 +3,10 @@ import { useMutation, useQuery } from "@blitzjs/rpc"
 import { Loader, List, Text, Button, Title, ActionIcon, Input, Checkbox } from "@mantine/core"
 import { notifications } from "@mantine/notifications"
 import { IconPlus, IconX } from "@tabler/icons-react"
+import { PromiseReturnType } from "blitz"
 import { Horizontal, Vertical } from "mantine-layout-components"
 import { Suspense, useState } from "react"
+import { ReactFC } from "types"
 import Layout from "~/core/layouts/Layout"
 import addTodo from "~/features/todos/mutations/addTodo"
 import deleteTodos from "~/features/todos/mutations/deleteTodos"
@@ -12,6 +14,9 @@ import toggleTodo from "~/features/todos/mutations/toggleTodo"
 import getMyTodos from "~/features/todos/queries/getMyTodos"
 import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
 import { invalidateQueries } from "~/utils/utils"
+
+type TodosType = PromiseReturnType<typeof getMyTodos>
+type TodoType = TodosType[0]
 
 const Todos: BlitzPage = () => {
   const currentUser = useCurrentUser()
@@ -53,7 +58,9 @@ const Todos: BlitzPage = () => {
     }
   }
 
-  const Todo = ({ todo }) => {
+  const Todo: ReactFC<{
+    todo: TodoType
+  }> = ({ todo }) => {
     const [$toggleTodo, { isLoading }] = useMutation(toggleTodo, {
       onSuccess: async (todo) => {
         // notifications.show({
