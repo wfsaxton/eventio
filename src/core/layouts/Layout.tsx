@@ -21,6 +21,7 @@ import { IconUserShield } from "@tabler/icons-react"
 import { RootErrorFallback } from "../components/RootErrorFallback"
 import { ReactFC } from "types"
 import { useRouter } from "next/router"
+import FullPageLoader from "../components/FullPageLoader"
 
 const Layout: ReactFC<{
   title?: string
@@ -111,7 +112,15 @@ const Layout: ReactFC<{
       >
         <Vertical fullW fullH>
           <ErrorBoundary resetKeys={[user]} FallbackComponent={RootErrorFallback}>
-            <Suspense fallback={<Loader />}>{children}</Suspense>
+            <Suspense
+              fallback={
+                <Vertical center fullH fullW>
+                  <Loader />
+                </Vertical>
+              }
+            >
+              {children}
+            </Suspense>
           </ErrorBoundary>
         </Vertical>
       </AppShell>

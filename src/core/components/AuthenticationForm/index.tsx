@@ -23,8 +23,9 @@ import { Vertical } from "mantine-layout-components"
 
 export function AuthenticationForm(props: PaperProps) {
   const [type, toggle] = useToggle(["login", "register"])
-  const [$login] = useMutation(login)
-  const [$signup] = useMutation(signup)
+  const [$login, { isLoading: isLoggingIn }] = useMutation(login)
+  const [$signup, { isLoading: isSigningUp }] = useMutation(signup)
+  const isLoading = isLoggingIn || isSigningUp
 
   const form = useForm({
     initialValues: {
@@ -49,7 +50,7 @@ export function AuthenticationForm(props: PaperProps) {
   }
 
   return (
-    <Vertical fullH fullW center>
+    <Vertical mih="100vh" fullH fullW center>
       <Paper radius="md" p="xl" withBorder {...props}>
         <Text size="lg" fw={500}>
           Welcome to EventIO, {type} with
@@ -105,7 +106,7 @@ export function AuthenticationForm(props: PaperProps) {
                 ? "Already have an account? Login"
                 : "Don't have an account? Register"}
             </Anchor>
-            <Button type="submit" radius="xl">
+            <Button loading={isLoading} type="submit" radius="xl">
               {upperFirst(type)}
             </Button>
           </Group>

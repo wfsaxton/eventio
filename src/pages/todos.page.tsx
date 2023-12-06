@@ -120,9 +120,7 @@ const TodosPage: BlitzPage = () => {
 
   return (
     <Layout title="My Todos">
-      <Suspense fallback={<Loader />}>
-        <Todos />
-      </Suspense>
+      <Todos />
     </Layout>
   )
 }
