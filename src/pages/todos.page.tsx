@@ -43,7 +43,6 @@ const TodosPage: BlitzPage = () => {
 
   const Todos = () => {
     const [todos] = useQuery(getMyTodos, {})
-    const currentUser = useCurrentUser()
     const [title, setTitle] = useState("")
 
     const [$addTodo, { isLoading }] = useMutation(addTodo, {
