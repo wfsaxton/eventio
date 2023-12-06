@@ -12,7 +12,7 @@ import addTodo from "~/features/todos/mutations/addTodo"
 import cleanCompletedTodos from "~/features/todos/mutations/cleanCompletedTodos"
 import deleteTodos from "~/features/todos/mutations/deleteTodos"
 import toggleTodo from "~/features/todos/mutations/toggleTodo"
-import getMyTodos from "~/features/todos/queries/getMyTodos"
+import getMyTodos from "~/features/todos/queries/getTodos"
 import { invalidateQueries } from "~/utils/utils"
 
 type TodosType = PromiseReturnType<typeof getMyTodos>
