@@ -12,14 +12,14 @@ const mantineTheme = {
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ErrorBoundary FallbackComponent={RootErrorFallback}>
-      <MantineProvider withGlobalStyles withNormalizeCSS theme={mantineTheme}>
+    <MantineProvider withGlobalStyles withNormalizeCSS theme={mantineTheme}>
+      <ErrorBoundary FallbackComponent={RootErrorFallback}>
         <Notifications position="top-right" />
         <Suspense fallback={<Loader />}>
           <Component {...pageProps} />
         </Suspense>
-      </MantineProvider>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </MantineProvider>
   )
 }
 

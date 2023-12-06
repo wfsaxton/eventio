@@ -18,9 +18,8 @@ import { invalidateQueries } from "~/utils/utils"
 type TodosType = PromiseReturnType<typeof getMyTodos>
 type TodoType = TodosType[0]
 
-const Todos: BlitzPage = () => {
+const TodosPage: BlitzPage = () => {
   const currentUser = useCurrentUser()
-  const [todos] = useQuery(getMyTodos, {})
   const [title, setTitle] = useState("")
 
   const [$addTodo, { isLoading }] = useMutation(addTodo, {
@@ -83,9 +82,10 @@ const Todos: BlitzPage = () => {
     )
   }
 
-  return (
-    <Layout title="Home">
-      <Title>My Todos</Title>
+  const Todos = () => {
+    const [todos] = useQuery(getMyTodos, {})
+
+    return (
       <Vertical>
         <Horizontal>
           <Input
@@ -101,17 +101,22 @@ const Todos: BlitzPage = () => {
             <IconX />
           </ActionIcon>
         </Horizontal>
-
-        <Suspense fallback={<Loader />}>
-          <List>
-            {todos.map((todo, index) => (
-              <Todo key={todo.id} todo={todo} />
-            ))}
-          </List>
-        </Suspense>
+        <List>
+          {todos.map((todo, index) => (
+            <Todo key={todo.id} todo={todo} />
+          ))}
+        </List>
       </Vertical>
+    )
+  }
+
+  return (
+    <Layout title="My Todos">
+      <Suspense fallback={<Loader />}>
+        <Todos />
+      </Suspense>
     </Layout>
   )
 }
 
-export default Todos
+export default TodosPage

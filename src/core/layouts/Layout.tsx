@@ -1,6 +1,6 @@
 import Head from "next/head"
 import React, { Suspense } from "react"
-import { BlitzLayout, Routes } from "@blitzjs/next"
+import { BlitzLayout, ErrorBoundary, Routes } from "@blitzjs/next"
 import {
   Anchor,
   AppShell,
@@ -17,7 +17,8 @@ import Link from "next/link"
 import { useMutation } from "@blitzjs/rpc"
 import logout from "~/features/auth/mutations/logout"
 import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
-import { IconUser, IconUserShield } from "@tabler/icons-react"
+import { IconUserShield } from "@tabler/icons-react"
+import { RootErrorFallback } from "../components/RootErrorFallback"
 
 type Props = {
   title?: string
@@ -61,7 +62,7 @@ const Layout: BlitzLayout<Props> = ({ title, children }) => {
                   Eventio
                 </Anchor>
 
-                <Link href={Routes.Todos()}>My Todos</Link>
+                <Link href={Routes.TodosPage()}>My Todos</Link>
               </Horizontal>
 
               {user && (
@@ -107,7 +108,9 @@ const Layout: BlitzLayout<Props> = ({ title, children }) => {
         })}
       >
         <Vertical fullW fullH>
-          <Suspense fallback={<Loader />}>{children}</Suspense>
+          <ErrorBoundary FallbackComponent={RootErrorFallback}>
+            <Suspense fallback={<Loader />}>{children}</Suspense>
+          </ErrorBoundary>
         </Vertical>
       </AppShell>
     </>
