@@ -19,16 +19,17 @@ import logout from "~/features/auth/mutations/logout"
 import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
 import { IconUserShield } from "@tabler/icons-react"
 import { RootErrorFallback } from "../components/RootErrorFallback"
+import { ReactFC } from "types"
+import { useRouter } from "next/router"
 
-type Props = {
+const Layout: ReactFC<{
   title?: string
-  children?: React.ReactNode
-}
-
-const Layout: BlitzLayout<Props> = ({ title, children }) => {
+  maxWidth?: number
+}> = ({ title, children, maxWidth = 800 }) => {
   const [logoutMutation] = useMutation(logout)
   const currentYear = new Date().getFullYear()
   const user = useCurrentUser()
+  const router = useRouter()
 
   return (
     <>
@@ -62,7 +63,7 @@ const Layout: BlitzLayout<Props> = ({ title, children }) => {
                   Eventio
                 </Anchor>
 
-                <Link href={Routes.TodosPage()}>My Todos</Link>
+                {user && <Link href={Routes.TodosPage()}>My Todos</Link>}
               </Horizontal>
 
               {user && (
@@ -82,6 +83,7 @@ const Layout: BlitzLayout<Props> = ({ title, children }) => {
                     variant="light"
                     onClick={async () => {
                       await logoutMutation()
+                      await router.push(Routes.Home())
                     }}
                   >
                     Logout
@@ -108,7 +110,7 @@ const Layout: BlitzLayout<Props> = ({ title, children }) => {
         })}
       >
         <Vertical fullW fullH>
-          <ErrorBoundary FallbackComponent={RootErrorFallback}>
+          <ErrorBoundary resetKeys={[user]} FallbackComponent={RootErrorFallback}>
             <Suspense fallback={<Loader />}>{children}</Suspense>
           </ErrorBoundary>
         </Vertical>
