@@ -13,7 +13,6 @@ import cleanCompletedTodos from "~/features/todos/mutations/cleanCompletedTodos"
 import deleteTodos from "~/features/todos/mutations/deleteTodos"
 import toggleTodo from "~/features/todos/mutations/toggleTodo"
 import getMyTodos from "~/features/todos/queries/getMyTodos"
-import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
 import { invalidateQueries } from "~/utils/utils"
 
 type TodosType = PromiseReturnType<typeof getMyTodos>
@@ -23,11 +22,7 @@ const TodosPage: BlitzPage = () => {
   const Todo: ReactFC<{
     todo: TodoType
   }> = ({ todo }) => {
-    const [$toggleTodo, { isLoading }] = useMutation(toggleTodo, {
-      onSuccess: async (todo) => {
-        await invalidateQueries()
-      },
-    })
+    const [$toggleTodo, { isLoading }] = useMutation(toggleTodo)
 
     return (
       <Horizontal>
