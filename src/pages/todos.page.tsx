@@ -7,6 +7,7 @@ import { IconClearAll, IconPlus, IconX } from "@tabler/icons-react"
 import { PromiseReturnType } from "blitz"
 import { Horizontal, Vertical } from "mantine-layout-components"
 import { useState } from "react"
+import { useInput } from "react-hanger"
 import { ReactFC } from "types"
 import { z } from "zod"
 import Layout from "~/core/layouts/Layout"
@@ -72,34 +73,43 @@ const TodosPage: BlitzPage = () => {
       },
     })
 
-    const form = useForm<TodoFormType>({
-      validate: zodResolver(TodoInput),
-    })
+    const title = useInput("")
 
     return (
       <Vertical>
-        <form
-          onSubmit={form.onSubmit(async (values) => {
-            console.log("ADDING TODO")
-            await $addTodo({
-              title: values.title,
-            })
-            form.setValues({ title: "" })
-          })}
-        >
-          <Horizontal>
-            <Input {...form.getInputProps("title")} placeholder="New todo" />
-            <ActionIcon size="xs" type="submit" loading={isLoading}>
-              <IconPlus />
-            </ActionIcon>
-            <ActionIcon size="xs" onClick={async () => await $deleteTodos({})}>
-              <IconX />
-            </ActionIcon>
-            <ActionIcon size="xs" onClick={async () => await $cleanCompletedTodos({})}>
-              <IconClearAll />
-            </ActionIcon>
-          </Horizontal>
-        </form>
+        <Horizontal>
+          <Input
+            {...title.eventBind}
+            placeholder="New todo"
+            onKeyDown={async (e) => {
+              if (e.key === "Enter") {
+                console.log("ADDING TODO")
+                await $addTodo({
+                  title: title.value,
+                })
+                title.setValue("")
+              }
+            }}
+          />
+          <ActionIcon
+            size="xs"
+            onClick={async () => {
+              console.log("ADDING TODO")
+              await $addTodo({
+                title: title.value,
+              })
+              title.setValue("")
+            }}
+          >
+            <IconPlus />
+          </ActionIcon>
+          <ActionIcon size="xs" onClick={async () => await $deleteTodos({})}>
+            <IconX />
+          </ActionIcon>
+          <ActionIcon size="xs" onClick={async () => await $cleanCompletedTodos({})}>
+            <IconClearAll />
+          </ActionIcon>
+        </Horizontal>
 
         <List>
           {todos.map((todo, index) => (
