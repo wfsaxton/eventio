@@ -83,7 +83,6 @@ const TodosPage: BlitzPage = () => {
             placeholder="New todo"
             onKeyDown={async (e) => {
               if (e.key === "Enter") {
-                console.log("ADDING TODO")
                 await $addTodo({
                   title: title.value,
                 })
@@ -94,7 +93,6 @@ const TodosPage: BlitzPage = () => {
           <ActionIcon
             size="xs"
             onClick={async () => {
-              console.log("ADDING TODO")
               await $addTodo({
                 title: title.value,
               })
