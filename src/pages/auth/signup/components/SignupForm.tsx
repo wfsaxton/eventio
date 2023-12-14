@@ -1,4 +1,3 @@
-import { FORM_ERROR } from "~/core/components/Form"
 import { useMutation } from "@blitzjs/rpc"
 import signup from "~/features/auth/mutations/signup"
 import { Button, PasswordInput, TextInput, Title } from "@mantine/core"
@@ -25,24 +24,8 @@ export const SignupForm = (props: SignupFormProps) => {
     },
   })
 
-  const onSubmit = async (values: {
-    fullname: string
-    email: string
-    password: string
-  }): Promise<
-    { email: string; FORM_ERROR?: undefined } | { FORM_ERROR: any; email?: undefined } | undefined
-  > => {
-    try {
-      await signupMutation(values)
-      props.onSuccess?.()
-    } catch (error: any) {
-      if (error.code === "P2002" && error.meta?.target?.includes("email")) {
-        // This error comes from Prisma
-        return { email: "This email is already being used" }
-      } else {
-        return { [FORM_ERROR]: error.toString() }
-      }
-    }
+  const onSubmit = async (values) => {
+    await signupMutation(values)
   }
   return (
     <div>

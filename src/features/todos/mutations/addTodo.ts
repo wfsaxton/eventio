@@ -1,12 +1,8 @@
 import { resolver } from "@blitzjs/rpc"
 import db from "db"
-import { z } from "zod"
+import { TodoInput } from "~/features/todos/schemas"
 
-const Input = z.object({
-  title: z.string(),
-})
-
-export default resolver.pipe(resolver.zod(Input), resolver.authorize(), async (params, ctx) => {
+export default resolver.pipe(resolver.zod(TodoInput), resolver.authorize(), async (params, ctx) => {
   const { title } = params
   const userId = ctx.session.userId
 

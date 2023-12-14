@@ -1,5 +1,4 @@
 import Layout from "~/core/layouts/Layout"
-import { FORM_ERROR } from "~/core/components/Form"
 import forgotPassword from "~/features/auth/mutations/forgotPassword"
 import { useMutation } from "@blitzjs/rpc"
 import { BlitzPage } from "@blitzjs/next"
@@ -20,13 +19,7 @@ const ForgotPasswordPage: BlitzPage = () => {
   })
 
   const onSubmit = async (values) => {
-    try {
-      await forgotPasswordMutation(values)
-    } catch (error: any) {
-      return {
-        [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
-      }
-    }
+    await forgotPasswordMutation(values)
   }
   return (
     <Layout title="Forgot Your Password?">
