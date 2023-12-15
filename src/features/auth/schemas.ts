@@ -2,7 +2,7 @@ import { z } from "zod"
 
 export const fullname = z
   .string()
-  .min(1)
+  .min(2)
   .max(100)
   .transform((str) => str.trim())
 

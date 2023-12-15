@@ -1,16 +1,17 @@
 import { BlitzPage } from "@blitzjs/next"
 import Layout from "~/core/layouts/Layout"
 import { Horizontal, Vertical } from "mantine-layout-components"
-import { ActionIcon, Button, Group, Input, Modal, Text, TextInput } from "@mantine/core"
+import { ActionIcon, Button, Group, Input, Modal, Text, TextInput, Textarea } from "@mantine/core"
 import { invalidateQueries, useStringParam } from "~/utils/utils"
 import getUserForProfile from "~/features/users/queries/getUserForProfile"
 import { useMutation, useQuery } from "@blitzjs/rpc"
 import { IconEdit } from "@tabler/icons-react"
 import { useCurrentUser } from "~/features/users/hooks/useCurrentUser"
 import { useDisclosure } from "@mantine/hooks"
-import editUserProfile from "~/features/users/mutations/editUserProfile"
-import { notifications } from "@mantine/notifications"
-import { useInput } from "react-hanger"
+import { notifications, showNotification } from "@mantine/notifications"
+import { Form, useForm, zodResolver } from "@mantine/form"
+import { UpdateProfileFormType, UpdateProfileInput } from "~/features/users/schemas"
+import updateProfile from "~/features/users/mutations/updateProfile"
 
 export const ProfilePage: BlitzPage = () => {
   const username = useStringParam("username")
@@ -19,16 +20,16 @@ export const ProfilePage: BlitzPage = () => {
     const [user] = useQuery(getUserForProfile, { username })
     const currentUser = useCurrentUser()
     const [opened, { open, close }] = useDisclosure(false)
-    const bio = useInput(user.bio ? user.bio : "")
+    const form = useForm<UpdateProfileFormType>({
+      validate: zodResolver(UpdateProfileInput),
+      validateInputOnBlur: true,
+      // initialValues: user,
+    })
 
     const isOwner = currentUser?.id === user?.id
 
-    const [$editUserProfile, { isLoading }] = useMutation(editUserProfile, {
+    const [$updateProfile, { isLoading }] = useMutation(updateProfile, {
       onSuccess: async (user) => {
-        notifications.show({
-          title: "Profile modified successfully",
-          message: `Bio: ${user.bio}`,
-        })
         await invalidateQueries()
       },
     })
@@ -38,31 +39,36 @@ export const ProfilePage: BlitzPage = () => {
     return (
       <>
         <Modal opened={opened} onClose={close} title="Edit Profile">
-          <Vertical>
-            <Horizontal>
-              <Text>Bio: </Text>
-              <Input {...bio.eventBind} />
-            </Horizontal>
-            <Horizontal>
-              <Button
-                onClick={async () => {
-                  await $editUserProfile({
-                    id: user.id,
-                    bio: bio.value,
-                  })
-                  close()
-                }}
-              >
-                Save
-              </Button>
-              <Button onClick={close}>Cancel</Button>
-            </Horizontal>
-          </Vertical>
+          {/* @ts-expect-error Server Component */}
+          <Form
+            form={form}
+            onSubmit={async (values) => {
+              await $updateProfile(values)
+              showNotification({
+                color: "green",
+                title: "Success",
+                message: "Profile updated successfully",
+              })
+              close()
+            }}
+          >
+            <Vertical fullW>
+              <TextInput required label="Name" placeholder="Name" {...form.getInputProps("name")} />
+              <TextInput
+                label="Username"
+                placeholder="Username"
+                {...form.getInputProps("username")}
+              />
+              <Textarea label="Bio" placeholder="Bio" {...form.getInputProps("bio")} />
+              <Horizontal>
+                <Button disabled={!form.isValid()} loading={isLoading} type="submit">
+                  Save
+                </Button>
+                <Button onClick={close}>Cancel</Button>
+              </Horizontal>
+            </Vertical>
+          </Form>
         </Modal>
-
-        {/* <Group position="center">
-          <Button onClick={open}>Open modal</Button>
-        </Group> */}
         <Vertical>
           <Horizontal>
             <Text size="xl">Profile for {user?.username}</Text>
@@ -73,6 +79,7 @@ export const ProfilePage: BlitzPage = () => {
             )}
           </Horizontal>
           <Text>Name: {user?.name}</Text>
+          <Text>Username: {user?.username}</Text>
           <Text>Bio: {user?.bio}</Text>
         </Vertical>
       </>
