@@ -69,16 +69,15 @@ const Layout: ReactFC<{
 
               {user && (
                 <Horizontal center>
-                  {user && (
-                    <Text>
-                      {user.name}{" "}
-                      {user.isAdmin && (
-                        <Tooltip label="Admin">
-                          <IconUserShield size={15} />
-                        </Tooltip>
-                      )}
-                    </Text>
+                  <Link href={Routes.EditProfilePage()}>
+                    <Text>{user.name}</Text>
+                  </Link>
+                  {user.isAdmin && (
+                    <Tooltip label="Admin">
+                      <IconUserShield size={15} />
+                    </Tooltip>
                   )}
+
                   <Button
                     size="xs"
                     variant="light"
